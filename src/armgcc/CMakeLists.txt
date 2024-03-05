@@ -56,144 +56,23 @@ set(SchedulerSources
     ${RepoRoot}/src/csp_hook_fsl_mx8mp_m7.c
 )
 
-set(CSPLibPath ${RepoRoot}/lib/csp)
-set(CSP_QFIFO_LEN 15 CACHE STRING "Length of incoming queue for router task")
-set(CSP_PORT_MAX_BIND 16 CACHE STRING "Length of incoming queue for router task")
-set(CSP_CONN_RXQUEUE_LEN 16 CACHE STRING "Number of packets in connection queue")
-set(CSP_CONN_MAX 8 CACHE STRING "Number of new connections on socket queue")
-set(CSP_BUFFER_SIZE 256 CACHE STRING "Bytes in each packet buffer")
-set(CSP_BUFFER_COUNT 15 CACHE STRING "Number of total packet buffers")
-set(CSP_RDP_MAX_WINDOW 5 CACHE STRING "Max window size for RDP")
-set(CSP_RTABLE_SIZE 10 CACHE STRING "Number of elements in routing table")
+SET(SiLibPath ${RepoRoot}/lib/lib_output/si/lib)
+SET(SiIncludePath ${RepoRoot}/lib/lib_output/si/include)
 
-option(CSP_HAVE_STDIO "OS provides C Standard I/O functions" ON)
-option(CSP_ENABLE_CSP_PRINT "Enable csp_print() function" ON)
-option(CSP_PRINT_STDIO "Use vprintf() for csp_print() function" ON)
-option(CSP_USE_RDP "Reliable Datagram Protocol" ON)
-option(CSP_USE_HMAC "Hash-based message authentication code" ON)
-option(CSP_USE_PROMISC "Promiscious mode" ON)
-option(CSP_USE_DEDUP "Packet deduplication" ON)
-option(CSP_USE_RTABLE "Use routing table" OFF)
-
-configure_file(${CSPLibPath}/csp_autoconfig.h.in ${CSPLibPath}/include/csp/autoconfig.h)
-set(CSPLibSources
-    ${CSPLibPath}/src/csp_bridge.c
-    ${CSPLibPath}/src/csp_buffer.c
-    ${CSPLibPath}/src/csp_conn.c
-    ${CSPLibPath}/src/csp_crc32.c
-    ${CSPLibPath}/src/csp_debug.c
-    ${CSPLibPath}/src/csp_dedup.c
-    ${CSPLibPath}/src/csp_hex_dump.c
-    ${CSPLibPath}/src/csp_id.c
-    ${CSPLibPath}/src/csp_iflist.c
-    ${CSPLibPath}/src/csp_init.c
-    ${CSPLibPath}/src/csp_io.c
-    ${CSPLibPath}/src/csp_port.c
-    ${CSPLibPath}/src/csp_promisc.c
-    ${CSPLibPath}/src/csp_qfifo.c
-    ${CSPLibPath}/src/csp_route.c
-    ${CSPLibPath}/src/csp_rtable_cidr.c
-    ${CSPLibPath}/src/csp_rtable_stdio.c
-    ${CSPLibPath}/src/csp_service_handler.c
-    ${CSPLibPath}/src/csp_services.c
-    ${CSPLibPath}/src/csp_rdp.c
-    ${CSPLibPath}/src/csp_rdp_queue.c
-
-    ${CSPLibPath}/src/arch/freertos/csp_queue.c
-    ${CSPLibPath}/src/arch/freertos/csp_clock.c
-    ${CSPLibPath}/src/arch/freertos/csp_semaphore.c
-    ${CSPLibPath}/src/arch/freertos/csp_system.c
-    ${CSPLibPath}/src/arch/freertos/csp_time.c
-
-    ${CSPLibPath}/src/crypto/csp_hmac.c
-    ${CSPLibPath}/src/crypto/csp_sha1.c
-
-    ${CSPLibPath}/src/drivers/usart/usart_kiss.c
-
-    ${CSPLibPath}/src/interfaces/csp_if_lo.c
-    ${CSPLibPath}/src/interfaces/csp_if_kiss.c
-    ${CSPLibPath}/src/interfaces/csp_if_i2c.c
-    ${CSPLibPath}/src/interfaces/csp_if_tun.c
-    ${CSPLibPath}/src/interfaces/csp_if_can.c
-    ${CSPLibPath}/src/interfaces/csp_if_can_pbuf.c
-)
-
-set(ParamLibPath ${RepoRoot}/lib/param)
-set(PARAM_STORE_FILE OFF CACHE BOOL "Store parameters in file")
-set(PARAM_STORE_VMEM OFF CACHE BOOL "Store parameters in virtual memory")
-set(PARAM_STORE_LOG OFF CACHE BOOL "Log parameter store operations")
-set(PARAM_HAVE_SYS_QUEUE OFF CACHE BOOL "Have system queue")
-set(PARAM_LIST_DYNAMIC OFF CACHE BOOL "List dynamic parameters")
-set(PARAM_LIST_POOL OFF CACHE BOOL "List pool parameters")
-set(PARAM_HAVE_SCHEDULER ON CACHE BOOL "Have scheduler")
-set(PARAM_HAVE_COMMANDS ON CACHE BOOL "Have commands")
-set(MPACK_FLOAT 0 CACHE STRING "MPACK float support")
-set(MPACK_STDIO 0 CACHE STRING "MPACK stdio support")
-
-file(WRITE ${ParamLibPath}/include/libparam.h
-"#ifndef LIBPARAM_H
-#define LIBPARAM_H
-
-#define PARAM_STORE_FILE ${PARAM_STORE_FILE}
-#define PARAM_STORE_VMEM ${PARAM_STORE_VMEM}
-#define PARAM_STORE_LOG ${PARAM_STORE_LOG}
-#define PARAM_HAVE_SYS_QUEUE ${PARAM_HAVE_SYS_QUEUE}
-#define PARAM_LIST_DYNAMIC ${PARAM_LIST_DYNAMIC}
-#define PARAM_LIST_POOL ${PARAM_LIST_POOL}
-#define PARAM_HAVE_SCHEDULER ${PARAM_HAVE_SCHEDULER}
-#define PARAM_HAVE_COMMANDS ${PARAM_HAVE_COMMANDS}
-#define MPACK_FLOAT ${MPACK_FLOAT}
-#define MPACK_STDIO ${MPACK_STDIO}
-
-#endif // LIBPARAM_H
-")
-
-set(ParamLibSources
-    ${ParamLibPath}/src/param/list/param_list.c
-    ${ParamLibPath}/src/param/param_client.c
-    ${ParamLibPath}/src/param/param_serializer.c
-    ${ParamLibPath}/src/param/param_server.c
-    ${ParamLibPath}/src/param/param_string.c
-    ${ParamLibPath}/src/param/param_queue.c
-    ${ParamLibPath}/src/param/param_wildcard.c
-    ${ParamLibPath}/src/param/param.c
-    ${ParamLibPath}/src/mpack/mpack.c
-    ${ParamLibPath}/src/vmem/vmem_client.c
-    ${ParamLibPath}/src/vmem/vmem_ram.c
-    ${ParamLibPath}/src/vmem/vmem_crc32.c
-    ${ParamLibPath}/src/vmem/vmem_server.c
-    ${ParamLibPath}/src/vmem/vmem.c
-    ${ParamLibPath}/src/objstore/objstore.c
-)
-
-if(PARAM_HAVE_SCHEDULER)
-    list(APPEND ParamLibSources
-        ${ParamLibPath}/src/param/scheduler/param_scheduler.c
-    )
-endif()
-
-if(PARAM_HAVE_COMMANDS)
-    list(APPEND ParamLibSources
-        ${ParamLibPath}/src/param/commands/param_commands.c
-    )
-endif()
+add_library(si STATIC IMPORTED)
+set_target_properties(si PROPERTIES IMPORTED_LOCATION ${SiLibPath}/libsi.a)
 
 add_executable(${MCUX_SDK_PROJECT_NAME} 
 ${SchedulerSources}
-${CSPLibSources}
-${ParamLibSources}
 )
-target_compile_definitions(${MCUX_SDK_PROJECT_NAME} PRIVATE CSP_FREERTOS=1)
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
     ${RepoRoot}/include
     ${RepoRoot}/src
-    ${CSPLibPath}/include
-    ${CSPLibPath}/src
-    ${ParamLibPath}/include
-    ${ParamLibPath}/src
-    /usr/local/arm/gcc-arm-none-eabi-10.3-2021.10/arm-none-eabi/include/machine
+    ${SiIncludePath}
+
 )
+
 set(CMAKE_MODULE_PATH
     ${BaseDirPath}/middleware/multicore
     ${BaseDirPath}/rtos/freertos
@@ -255,7 +134,6 @@ include(utilities_misc_utilities_MIMX8ML8)
 
 include(device_MIMX8ML8_system_MIMX8ML8)
 
-
 TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--start-group)
 
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE m)
@@ -265,6 +143,8 @@ target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE c)
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE gcc)
 
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE nosys)
+
+target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE si)
 
 TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--end-group)
 

@@ -1,0 +1,20 @@
+[binaries]
+c = 'arm-none-eabi-gcc'
+ar = 'arm-none-eabi-ar'
+as = 'arm-none-eabi-as'
+strip = 'arm-none-eabi-strip'
+
+c_args = [ '-mcpu=cortex-m7' ]
+
+cpu_dir = 'arm'
+
+[host_machine]
+system = 'freertos'
+cpu_family = 'arm'
+cpu = 'cortex-m7'
+endian = 'little'
+
+[built-in options]
+c_args = ['-march=armv7e-m+fp.dp', '-mfloat-abi=hard', '-mfpu=fpv5-d16', '-ffunction-sections', '-fdata-sections']
+c_link_args = ['-march=armv7e-m+fp.dp', '-mfloat-abi=hard', '-mfpu=fpv5-d16']
+
