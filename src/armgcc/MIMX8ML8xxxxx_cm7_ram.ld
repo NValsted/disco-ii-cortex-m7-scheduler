@@ -33,7 +33,7 @@ STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x400;
 MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000400
-  itcm                  (RX)  : ORIGIN = 0x00000400, LENGTH = 0x0001FC00
+  itcm                  (RX)  : ORIGIN = 0x00000400, LENGTH = 0x0003FC00
   dtcm                  (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00020000
   ddr                   (RW)  : ORIGIN = 0x80000000, LENGTH = 0x01000000
 }

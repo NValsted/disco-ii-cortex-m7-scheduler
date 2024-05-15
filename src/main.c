@@ -1,3 +1,7 @@
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 #include "fsl_device_registers.h"
 #include "fsl_debug_console.h"
 #include <stdarg.h>
@@ -6,7 +10,6 @@
 #include "task.h"
 
 #include <csp/csp.h>
-#include <csp_proc/proc_server.h>
 
 #include "clock_config.h"
 #include "pin_mux.h"
@@ -63,8 +66,17 @@ int main(void) {
 
 	setup_network();
 
-	proc_server_init();
-	csp_bind_callback(proc_serve, PROC_PORT_SERVER);
+	// LUA DUMMY CODE
+	lua_State * L = luaL_newstate();
+	luaL_openlibs(L);
+
+	if (luaL_dostring(L, "print('Hello, World!')") != LUA_OK) {
+		const char * errorMessage = lua_tostring(L, -1);
+		printf("Error: %s\n", errorMessage);
+		lua_pop(L, 1);
+	}
+
+	lua_close(L);
 
 	vTaskStartScheduler();
 	(void)PRINTF("Failed to start FreeRTOS.\r\n");
